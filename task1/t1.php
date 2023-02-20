@@ -4,7 +4,7 @@
     if (isset($_POST["submit_btn"])) {
         $a = $_POST["first_name"];
         $b = $_POST["sir_name"];
-        $full= "welcome " . $a . ' ' . $b ;
+        $full= $a . ' ' . $b ;
     }
     ?>
 <body>
