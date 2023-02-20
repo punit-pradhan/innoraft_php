@@ -10,6 +10,6 @@ if (isset($_POST["submit_btn"])) {
     $folder = "images/" . $image_name;
     move_uploaded_file($tmp_name, $folder);
     echo "welcome " . $a . ' ' . $b ."<br><br>";
-    echo "<img src=$folder>";
+    echo "<img src=$folder width=400px,height=auto>";
 }
 ?>
