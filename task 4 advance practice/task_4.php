@@ -6,17 +6,6 @@
          require('phone/vendor/autoload.php');
          $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
          $arrRegions = $phoneUtil->getSupportedRegions();
-        // if(isset($_POST['verify'])){
-        //  $number = $_POST['phone_number'];
-        //  $region = $_POST['countey_code'];
-        //  $parseNumber = $phoneUtil->parse($number, $region);
-        //  if ($phoneUtil->isValidNumber($parseNumber)) {
-        //      echo "number is valid: ";
-        //  }
-        //  else {
-        //      echo "number is not valid";
-        //  }
-        // }
         ?>
     </div>
     <form action="submit.php" method="POST" enctype="multipart/form-data">

@@ -5,12 +5,14 @@
     $arrRegions = $phoneUtil->getSupportedRegions();
     $number = $_POST['phone_number'];
     $region = $_POST['country_code'];
-    $parseNumber = $phoneUtil->parse($number, $region);
+    $requiredRegion = strtok($region, ' ');
+    // echo $requiredRegion;
+    $parseNumber = $phoneUtil->parse($number, $requiredRegion);
     if ($phoneUtil->isValidNumber($parseNumber)) {
-        echo "number is valid: ";
+        echo "Number Is Valid : ";
     }
     else {
-        echo "number is not valid";
+        header("Location: task_4.php");
     }
     $a = $_POST["first_name"];
     $b = $_POST["sir_name"];
@@ -21,7 +23,7 @@
     $tmp_name = $_FILES['image']['tmp_name'];
     $folder = "images/" . $image_name;
     move_uploaded_file($tmp_name, $folder);
-    echo "<b> welcome </b>" . $a . ' ' . $b . "<br><br>";
+    echo "<b> WELCOME </b>" . $a . ' ' . $b . "<br><br>";
     echo "<img src=$folder width=400px,height=auto>";
 
     foreach ($unextracted_marks as $mark) {
