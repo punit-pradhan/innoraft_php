@@ -1,6 +1,6 @@
 <?php
-    require('phone/vendor/autoload.php');
-    if (isset($_POST["submit_btn"])) {
+require('phone/vendor/autoload.php');
+if (isset($_POST["submit_btn"])) {
     $phoneUtil = libphonenumber\PhoneNumberUtil::getInstance();
     $arrRegions = $phoneUtil->getSupportedRegions();
     $number = $_POST['phone_number'];
@@ -8,14 +8,13 @@
     $requiredRegion = strtok($region, ' ');
     $parseNumber = $phoneUtil->parse($number, $requiredRegion);
     if ($phoneUtil->isValidNumber($parseNumber)) {
-        echo "Number Is Valid : ";
-    }
-    else {
+    } else {
         header("Location: task_4.php");
     }
 
     $a = $_POST["first_name"];
     $b = $_POST["sir_name"];
+    $fullName = $a ." ". $b;
     $type = $_FILES["image"]["type"];
     $type = substr($type, strpos($type, "/") + 1);
     $image_name = $a . $b . "." . $type;
@@ -23,7 +22,6 @@
     $tmp_name = $_FILES['image']['tmp_name'];
     $folder = "images/" . $image_name;
     move_uploaded_file($tmp_name, $folder);
-    echo "<b><i> WELCOME </i></b>" ."<b>$a</b>" . ' ' . "<b>$b</b>". "<br><br>";
     $email = $_POST['email'];
     $curl = curl_init();
 
@@ -49,22 +47,51 @@
 
     curl_close($curl);
     $obj = json_decode($response);
-    // print_r($obj);
     if (isset($obj->can_connect_smtp)) {
         if ($obj->can_connect_smtp) {
-            echo "The Email You Entered ".$email ." Is A Real Email<br><br>";
         } else {
-            echo $email." Is Not A Real Email<br><br>";
+        header("Location: task_4.php");
+        // echo $email . " Is Not A Real Email<br><br>";
         }
     } else {
-        echo $email ."Is Invalid Email<br><br>";
+        header("Location: task_4.php");
+        // echo $email . "Is Invalid Email<br><br>";
     }
-    echo "<img src=$folder width=400px,height=auto>";
 
     foreach ($unextracted_marks as $mark) {
         $pos = strpos($mark, "|");
         $marks[substr($mark, 0, $pos)] = substr($mark, $pos + 1);
     }
+
+    $server_file = "./docs/$fullName.doc";
+    $server_content = "Form Data\n";
+    $server_content .= "Name : " . $fullName . "\n";
+    $server_content .= "Email : " . $email . "\n";
+    $server_content .= "Phone : " . $parseNumber . "\n";
+    $server_content .= "Subject  Marks" . "\n";
+    foreach ($marks as $key => $value) {
+        // outputs table row as subject => marks
+        $server_content .= "$key  $value" . "\n";
+    }
+    file_put_contents($server_file, $server_content);
+    if (file_exists($server_file)) {
+        // Set the headers to trigger a download
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($server_file) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($server_file));
+
+        // Output the file content
+        readfile($server_file);
+        exit;
+    } else {
+        // Handle the error
+        echo "The file does not exist.";
+    }
+
 }
 ?>
 <br><br>
