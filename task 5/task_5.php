@@ -2,6 +2,11 @@
 
 <body>
     <div>
+        <?php
+        require('phone/vendor/autoload.php');
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+        $arrRegions = $phoneUtil->getSupportedRegions();
+        ?>
     </div>
     <form action="submit.php" method="POST" enctype="multipart/form-data">
         <label for="first_name">enter your first name</label><br>
@@ -19,11 +24,24 @@
         <br><br>
         <table>
             <tr>
-                <td><label>Enter phone number: </lable><br>
+                <td><label>Enter phone number : </lable><br>
                         <select name="country_code">
-                            <option value="+91">+91</option>
+                            <option selected="selected">Country Code</option>
+                            <?php
+                            foreach ($arrRegions as $region) {
+                                echo "<option>" . $region . " +" . $phoneUtil->getCountryCodeForRegion($region) . "</option>";
+                            }
+                            ?>
                         </select>
                         <input type="text" name="phone_number">
+                </td>
+            </tr>
+        </table>
+        <br><br>
+        <table>
+            <tr>
+                <td><label>Enter Your Email : </lable><br>
+                        <input type="text" name="email">
                 </td>
             </tr>
         </table>
